@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  email: MyString
+  plan_id: 1
+  credit: 9.99
+  autobill: false
+
+two:
+  email: MyString
+  plan_id: 1
+  credit: 9.99
+  autobill: false
