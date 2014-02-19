@@ -11,13 +11,13 @@ module ApplicationHelper
     @_section = ss
   end
 
-  def top_nav_item(text, path)
+  def top_nav_item(text, path, extra = {})
     kk = ""
     if text == @_section || text == @_page_title
       kk = "active"
     end
 
-    content_tag("li", link_to(text, path), class: kk)
+    content_tag("li", link_to(text, path, extra), class: kk)
   end
 
   def show_flash_notices

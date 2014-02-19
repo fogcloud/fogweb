@@ -1,4 +1,11 @@
 
+.nav-text {
+    height: 50px;
+    padding: 15px;
+    line-height: 20px;
+    color: white;
+}
+
 .main-content {
     min-height: 6in;
 }
@@ -16,4 +23,9 @@
     margin: auto;
     padding: 1ex;
     border-top: thin solid grey;
+}
+
+.footer p {
+    max-width: 8in;
+    margin: auto;
 }

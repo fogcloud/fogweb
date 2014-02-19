@@ -1,10 +1,11 @@
 class CreateUsers < ActiveRecord::Migration
   def change
     create_table :users do |t|
-      t.string :email, null: false
+      t.string  :email, null: false
+      t.boolean :admin, null: false, default: false
+      
       t.integer :plan_id
-      t.decimal :credit_usd, precision: 10, scale: 2
-      t.boolean :autobill, null: false, default: false
+      t.date    :expires, null: false, default: "1995-01-01"
 
       t.timestamps
     end

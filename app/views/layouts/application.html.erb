@@ -30,20 +30,23 @@
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <% if user_signed_in? %>
-          <%= top_nav_item "Do Stuff", "/do/stuff" %>
+          <%= top_nav_item "Dashboard", main_dashboard_path %>
       <% else %>
           <%= top_nav_item "Welcome", root_path %>
       <% end %>
         <%= top_nav_item "Contact", main_contact_path %>
-        <%= top_nav_item "About", "https://www.fogsync.com" %>
+        <li style="width: 2em;">&nbsp;</li>
+        <%= top_nav_item "www.fogsync.com", "https://www.fogsync.com" %>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
         <% if user_signed_in? %>
+          <%= top_nav_item current_user.email, current_user %>
+          <%= top_nav_item "Log Out", destroy_user_session_path, method: :delete %>
         <% else %>
           <%= top_nav_item "Register", new_user_registration_path %>
-        <%= top_nav_item "Log In",  new_user_session_path %>
-      <% end %> 
+          <%= top_nav_item "Log In",  new_user_session_path %>
+        <% end %> 
       </ul>
     </div>
   </div>
@@ -58,9 +61,11 @@
 
 <div class="footer"> 
 
-  <p>FogSync.com Sync Manager Copyright &copy;2014 Nat Tuck. Full source code
-  available on Github. You may copy and redistribute this code under the terms
-  of the Creative Commons BY-NC-ND licence.</p> 
+  <p>FogSync.com Sync Manager Copyright &copy;2014 Nat Tuck. Full <a
+    href="https://github.com/fogcloud/fogweb">source code available</a> on
+  Github under a no-commercial-use license. FogSync.com Sync Manager is
+  alpha-quality software. I'm not liable if it corrupts all your data, your
+  computer explodes in a ball of fire, and your house burns down.</p>
 
 </div>
 
