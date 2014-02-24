@@ -5,10 +5,9 @@ class Defaults < ActiveRecord::Migration
       email: "nat@ferrus.net", 
       admin: true,
       confirmed_at: Time.now,
-      password: "fakemcfake",
-      password_confirmation: "fakemcfake",
+      password: "derpcake",
+      password_confirmation: "derpcake",
     )
-    uu.encrypted_password = "$2a$10$Sf1QzriFEHDX95oVopAfcOeSW81F6i4np.2Cpfqa1K.JN8eiKhBWu"
     uu.save!
   end
 

@@ -2,6 +2,8 @@ class BlocksController < ApplicationController
   before_action :set_block, only: [:show, :edit, :update, :destroy]
   before_filter :must_be_signed_in
 
+  skip_before_filter :verify_authenticity_token, only: [:create, :destroy]
+
   # GET /blocks
   # GET /blocks.json
   def index

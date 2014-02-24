@@ -15,12 +15,12 @@ class Block < ActiveRecord::Base
   end
 
   def path
-    d0 = name[0..1]
-    d1 = name[2..3]
-    d2 = name[4..5]
-    d3 = name[6..7]
-    nn = name[8..-1]
-    "/data/#{d0}/#{d1}/#{d2}/#{d3}/#{nn}"
+    # 4096 entries in each of base, d0, and d1
+    # allows for 64G blocks = 256TB
+    d0 = name[0..2]
+    d1 = name[3..5]
+    nn = name[6..-1]
+    "/data/#{d0}/#{d1}/#{nn}"
   end
   
   def file
@@ -38,7 +38,7 @@ class Block < ActiveRecord::Base
 
     data = upload.read(4096)
 
-    File.open(file, "w") do |ff|
+    File.open(file, "wb") do |ff|
       ff.write(data)
     end
   end
