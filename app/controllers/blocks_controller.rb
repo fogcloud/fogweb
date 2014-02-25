@@ -30,6 +30,16 @@ class BlocksController < ApplicationController
     @block = Block.new(block_params)
     @block.user_id = current_user.id
 
+    dup = Block.find_by_name(@block.name)
+    unless dup.nil?
+      if @block.user_id != dup.user_id
+        raise Exception.new("Same block name for two users. Don't share keys.")
+      end
+
+      @block = dup
+      @block.updated_at = Time.now
+    end
+
     respond_to do |format|
       if @block.save
         format.html { redirect_to @block, notice: 'Block was successfully created.' }
