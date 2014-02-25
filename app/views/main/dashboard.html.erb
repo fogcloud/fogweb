@@ -1,10 +1,54 @@
 <% page_title "Dashboard" %>
 
 <div class="page-header">
-  <h1>Your Dashboard</h1>
+  <h1>Dashboard</h1>
 </div>
 
 <div class="row">
-  <p>Here's where you can control your FogSync.com file storage.</p>
-  <p>Current date: <span class="local-date"><%= Time.now %></span></p>
+  <p>Here's where you can manage your FogSync.com file storage.</p>
+  <p>Last activity: <span class="local-date"><%= @last %></span></p>
+</div>
+
+<div class="row">
+  <div class="col-sm-6">
+    <h2>Current Usage</h2>
+
+    <table class="table">
+      <tbody>
+      <tr>
+        <td>Megs</td>
+        <td><%= @user.megs %></td>
+      </tr>
+      <tr>
+        <td>Blocks</td>
+        <td><%= @user.blocks.count %> (<%= link_to "list", blocks_path %>)</td>
+      </tr>
+      <tr>
+        <td>Percent</td>
+        <td><%= sprintf("%.02f", 100 * @user.megs.to_f / @plan.megs) %></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-sm-6">
+    <h2>Current Plan</h2>
+
+    <table class="table">
+      <tbody>
+      <tr>
+        <td>Name</td>
+        <td><%= @plan.name %></td>
+      </tr>
+      <tr>
+        <td>Megs</td>
+        <td><%= @plan.megs %></td>
+      </tr>
+      <tr>
+        <td>USD/month</td>
+        <td><%= @plan.price_usd %></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

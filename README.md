@@ -2,12 +2,11 @@
 
 Copyright &copy; 2014 Nat Tuck. All right reserved, except:
 
- * You may fork and modify this on git repo.
+ * You may fork/clone and modify this git repository.
  * You can download and run copies for personal, non-commercial purposes.
  * Modifications must retain this copyright notice.
 
 ## Installation Notes
 
- * Update config.action_mailer.default_url_options in config/environments/production.rb 
-
+ * Update the default URL options for ActionMailer in config/environments/production.rb 
 
