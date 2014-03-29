@@ -23,7 +23,7 @@
       
       <tbody>
       <%= content_tag_for(:tr, @blocks) do |block| %>
-        <td><%= block.created_at %></td>
+        <td><span class="local-date"><%= block.created_at %></span></td>
         <td><%= link_to block.name, block.path %></td>
         <td><%= link_to 'Destroy', block, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       <% end %>

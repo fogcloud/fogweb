@@ -1,3 +1,6 @@
+require 'tmpdir'
+require 'pathname'
+
 class BlocksController < ApplicationController
   before_action :set_block, only: [:show, :edit, :update, :destroy]
   before_filter :must_be_signed_in
@@ -51,6 +54,83 @@ class BlocksController < ApplicationController
         format.json { render json: @block.errors, status: :unprocessable_entity }
       end
     end
+  end
+  
+  # GET /blocks/upload_form
+  def upload_form
+  end
+
+  # POST /blocks/upload
+  # POST /blocks/upload.json
+  def upload
+    # Bulk upload. Ship a tarball of blocks.
+    
+    @tar = params.require(:tarball)
+
+    blocks = []
+
+    Dir.mktmpdir do |tmp|
+      system(%Q{(cd "#{tmp}" && tar xf "#{@tar.path}")})
+      Dir.foreach(tmp) do |file|
+        unless file.size == 64 
+          puts "'#{file}' wrong length"
+          next
+        end
+
+        blocks << file
+
+        if Block.find_by_name(file)
+          puts "Got that one: #{file}"
+        else
+          File.open("#{tmp}/#{file}") do |upload|
+            bb = Block.new
+            bb.user_id = current_user.id
+            bb.name   = Pathname.new(file).basename.to_s
+            bb.upload = upload
+            bb.save!
+          end
+        end
+      end
+    end
+
+    render json: {'uploaded' => blocks}, status: 200
+  end
+
+  # GET /blocks/download_form
+  def download_form
+  end
+
+  # POST /blocks/download
+  # POST /blocks/download.json
+  def download
+    # Bulk download. Ship a tarball of blocks.
+   
+    @blocks = params.require(:blocks).split(/\s+/)
+   
+    if @blocks.size > 2560
+      render json: {"error" => "Too many blocks"}, status: 413
+      return
+    end
+
+    Dir.mktmpdir do |tmp|
+      system(%Q{mkdir "#{tmp}/blocks"})
+
+      @blocks.each do |bname|
+        block = Block.find_by_name(bname) or next
+        system(%Q{cp "#{block.file}" "#{tmp}/blocks/#{block.name}"})
+      end
+      
+      system(%Q{cd "#{tmp}/blocks" && tar cf "#{tmp}/blocks.tar" *}) 
+
+      send_data File.read("#{tmp}/blocks.tar"), type: 'application/x-tar'
+    end
+  end
+
+  # POST /blocks/remove
+  # POST /blocks/remove.json
+  def remove
+    # Bulk delete. 
+    
   end
 
   # PATCH/PUT /blocks/1

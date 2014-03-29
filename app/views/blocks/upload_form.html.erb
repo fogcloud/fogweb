@@ -1,0 +1,11 @@
+
+<div class="row">
+  <h1>Upload a tarball of blocks</h1>
+</div>
+
+<div class="row">
+  <%= form_tag({action: :upload}, multipart: true) do %>
+    <%= file_field_tag :tarball %>
+    <%= submit_tag "Upload Tarball" %>
+  <% end %>
+</div>

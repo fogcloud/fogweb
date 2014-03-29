@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
 
   def cant_be_signed_in
     if user_signed_in?
-      redirect_to main_dashboard_path, notice: "Logged in users go here."
+      redirect_to main_dashboard_path
     end 
   end
 end
