@@ -5,7 +5,7 @@ class BlocksController < ApplicationController
   before_action :set_block, only: [:show, :edit, :update, :destroy]
   before_filter :must_be_signed_in
 
-  skip_before_filter :verify_authenticity_token, only: [:create, :destroy]
+  skip_before_filter :verify_authenticity_token, only: [:create, :destroy, :upload, :download]
 
   # GET /blocks
   # GET /blocks.json
@@ -71,23 +71,26 @@ class BlocksController < ApplicationController
 
     Dir.mktmpdir do |tmp|
       system(%Q{(cd "#{tmp}" && tar xf "#{@tar.path}")})
-      Dir.foreach(tmp) do |file|
-        unless file.size == 64 
-          puts "'#{file}' wrong length"
-          next
-        end
 
-        blocks << file
-
-        if Block.find_by_name(file)
-          puts "Got that one: #{file}"
-        else
-          File.open("#{tmp}/#{file}") do |upload|
-            bb = Block.new
-            bb.user_id = current_user.id
-            bb.name   = Pathname.new(file).basename.to_s
-            bb.upload = upload
-            bb.save!
+      Block.transaction do
+        Dir.foreach(tmp) do |file|
+          unless file.size == 64 
+            puts "'#{file}' wrong length"
+            next
+          end
+          
+          blocks << file
+          
+          if Block.find_by_name(file)
+            puts "Got that one: #{file}"
+          else
+            File.open("#{tmp}/#{file}") do |upload|
+              bb = Block.new
+              bb.user_id = current_user.id
+              bb.name   = Pathname.new(file).basename.to_s
+              bb.upload = upload
+              bb.save!
+            end
           end
         end
       end

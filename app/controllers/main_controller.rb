@@ -8,7 +8,9 @@ class MainController < ApplicationController
   def dashboard
     @user = current_user
     @plan = current_user.plan
-    @last = Block.order(:created_at).last.created_at
+
+    lb = Block.order(:created_at).last
+    @last = lb.nil? ? "" : lb.created_at
   end
 
   def contact
