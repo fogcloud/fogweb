@@ -36,7 +36,7 @@ class Block < ActiveRecord::Base
 
     FileUtils.mkdir_p(file.dirname.to_s)
 
-    data = upload.read(4096)
+    data = upload.read(Block.block_size)
 
     File.open(file, "wb") do |ff|
       ff.write(data)

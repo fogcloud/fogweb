@@ -41,7 +41,7 @@
       
       <ul class="nav navbar-nav navbar-right">
         <% if user_signed_in? %>
-          <%= top_nav_item current_user.email, current_user %>
+          <%= top_nav_item current_user.email, edit_user_registration_path %>
           <%= top_nav_item "Log Out", destroy_user_session_path, method: :delete %>
         <% else %>
           <%= top_nav_item "Register", new_user_registration_path %>
