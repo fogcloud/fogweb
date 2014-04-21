@@ -6,7 +6,11 @@
   <p>Enter block hashes, one per line.</p>
 
   <%= form_tag({action: "download"}) do %>
-    <p><%= text_area_tag :blocks %></p>
+    <p><%= label_tag :blocks do %>
+         Blocks <br>
+         <%= text_area_tag :blocks %>
+       <% end %>  
+    </p>
     <p><%= submit_tag "Download Tarball" %></p>
   <% end %>
 </div>

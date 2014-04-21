@@ -74,6 +74,8 @@ class BlocksController < ApplicationController
 
       Block.transaction do
         Dir.foreach(tmp) do |file|
+          next if file =~ /^\./
+
           unless file.size == 64 
             puts "'#{file}' wrong length"
             next

@@ -5,7 +5,13 @@
 
 <div class="row">
   <%= form_tag({action: :upload}, multipart: true) do %>
-    <%= file_field_tag :tarball %>
-    <%= submit_tag "Upload Tarball" %>
+    <p>
+       <%= label_tag :tarball do %>
+         Tarball
+         <%= file_field_tag :tarball %>
+       <% end %>
+    </p>
+
+    <p><%= submit_tag "Upload Tarball" %></p>
   <% end %>
 </div>
