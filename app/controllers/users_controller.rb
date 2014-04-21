@@ -67,7 +67,10 @@ class UsersController < ApplicationController
   def set_and_check_user
     @user = User.find(params[:id])
 
-    if @user.id != current_user.id && !user.admin?
+    if @user.id != current_user.id && !current_user.admin?
+      logger.info "Logged in user (id = #{current_user.id}) doesn't match owner (id = #{@user.id}"
+      logger.info "User is not admin" unless current_user.admin?
+
       redirect_to '/', alert: "No snooping other users"
     end
   end

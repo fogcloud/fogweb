@@ -1,13 +1,16 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  email: MyString
-  plan_id: 1
-  credit: 9.99
-  autobill: false
+admin:
+  email: admin@example.com
+  plan: default
+  admin: true
+  expires: '2100-01-01'
+  confirmed_at: '2005-01-01'
+  encrypted_password: zzzz
 
-two:
-  email: MyString
-  plan_id: 1
-  credit: 9.99
-  autobill: false
+user:
+  email: user@example.com
+  plan: default
+  expires: '2100-01-01'
+  confirmed_at: '2005-01-01'
+  encrypted_password: zzzz

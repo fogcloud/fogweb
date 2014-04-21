@@ -12,8 +12,6 @@
       <tr>
             <th>Email</th>
             <th>Plan</th>
-            <th>Credit</th>
-            <th>Autobill</th>
             <th></th>
         <th></th>
         <th></th>
@@ -24,8 +22,6 @@
       <%= content_tag_for(:tr, @users) do |user| %>
             <td><%= user.email %></td>
             <td><%= user.plan_id %></td>
-            <td><%= user.credit %></td>
-            <td><%= user.autobill %></td>
             <td><%= link_to 'Show', user %></td>
         <td><%= link_to 'Edit', edit_user_path(user) %></td>
         <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>

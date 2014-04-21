@@ -2,44 +2,29 @@ require 'test_helper'
 
 class BlocksControllerTest < ActionController::TestCase
   setup do
+    @user  = users(:user)
+
     @block = blocks(:one)
   end
 
   test "should get index" do
+    sign_in @user
+
     get :index
     assert_response :success
     assert_not_nil assigns(:blocks)
   end
 
   test "should get new" do
+    sign_in @user
+
     get :new
     assert_response :success
   end
 
-  test "should create block" do
-    assert_difference('Block.count') do
-      post :create, block: { hash: @block.hash, user_id: @block.user_id }
-    end
-
-    assert_redirected_to block_path(assigns(:block))
-  end
-
-  test "should show block" do
-    get :show, id: @block
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get :edit, id: @block
-    assert_response :success
-  end
-
-  test "should update block" do
-    patch :update, id: @block, block: { hash: @block.hash, user_id: @block.user_id }
-    assert_redirected_to block_path(assigns(:block))
-  end
-
   test "should destroy block" do
+    sign_in @user
+
     assert_difference('Block.count', -1) do
       delete :destroy, id: @block
     end

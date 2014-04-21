@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
-  megs: 1
+default:
+  name: Default
+  megs: 1024
   price_usd: 9.99
 
-two:
-  name: MyString
-  megs: 1
+plan2:
+  name: Default
+  megs: 1024
   price_usd: 9.99

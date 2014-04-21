@@ -10,5 +10,4 @@ class MainControllerTest < ActionController::TestCase
     get :contact
     assert_response :success
   end
-
 end
