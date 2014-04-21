@@ -35,6 +35,11 @@
           <%= top_nav_item "Welcome", root_path %>
       <% end %>
         <%= top_nav_item "Contact", main_contact_path %>
+      
+        <% if current_user.admin? %>
+          <%= top_nav_item "Admin", main_admin_path %>
+        <% end %>
+
         <li style="width: 2em;">&nbsp;</li>
         <%= top_nav_item "www.fogsync.com", "https://www.fogsync.com" %>
       </ul>

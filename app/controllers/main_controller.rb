@@ -1,6 +1,7 @@
 class MainController < ApplicationController
   before_filter :cant_be_signed_in, only: [:index]
   before_filter :must_be_signed_in, only: [:dashboard]
+  before_filter :must_be_admin,     only: [:admin]
 
   def index
   end
@@ -14,5 +15,8 @@ class MainController < ApplicationController
   end
 
   def contact
+  end
+
+  def admin
   end
 end

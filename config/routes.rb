@@ -1,5 +1,8 @@
 Fogweb::Application.routes.draw do
 
+  get 'users/sign_up' => redirect('/404.html')
+  post 'users/create' => redirect('/404.html')
+
   devise_for :users, controllers: { sessions: 'sessions' }
 
   resources :users
@@ -14,6 +17,7 @@ Fogweb::Application.routes.draw do
   get "main/index"
   get "main/contact"
   get "main/dashboard"
+  get "main/admin"
 
   root 'main#index'
 
