@@ -36,7 +36,7 @@
       <% end %>
         <%= top_nav_item "Contact", main_contact_path %>
       
-        <% if current_user.admin? %>
+        <% if current_user && current_user.admin? %>
           <%= top_nav_item "Admin", main_admin_path %>
         <% end %>
 
