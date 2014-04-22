@@ -8,5 +8,7 @@ bundle install
 
 rake db:migrate
 
+rake assets:precompile
+
 touch tmp/restart.txt
 
