@@ -1,17 +1,16 @@
 
 require 'fileutils'
 
-class Block < ActiveRecord::Base
-  belongs_to :user
-
-  validates :name, length: { is: 64 }
-
-  validate :block_data_is_saved
-  validate :check_upload_errors
-  after_destroy :cleanup!
+class Block
+  attr_accessor :name
+  attr_accessor :user_id
 
   def self.block_size
-    4096
+    65536
+  end
+
+  def user
+    User.find(user_id)
   end
 
   def path
@@ -19,8 +18,7 @@ class Block < ActiveRecord::Base
     # allows for 64G blocks = 256TB
     d0 = name[0..2]
     d1 = name[3..5]
-    nn = name[6..-1]
-    "/data/#{d0}/#{d1}/#{nn}"
+    "/data/#{user.id}/#{d0}/#{d1}/#{name}"
   end
   
   def file
@@ -41,9 +39,15 @@ class Block < ActiveRecord::Base
     File.open(file, "wb") do |ff|
       ff.write(data)
     end
+
+    unless File.file?(file) && File.size(file) == Block.block_size
+      @upload_erros ||= []
+      @upload_errors << "Block was not successfully stored to disk."
+      return
+    end
   end
 
-  def cleanup!
+  def remove!
     if file.to_s.length > 10
       begin
         File.unlink(file.to_s)
@@ -63,15 +67,6 @@ class Block < ActiveRecord::Base
   end
 
   def check_upload_errors
-    return if @upload_errors.nil?
-    @upload_errors.each do |ee|
-      self.errors[:base] << ee
-    end
-  end
-
-  def block_data_is_saved
-    unless File.file?(file) && File.size(file) == Block.block_size
-      self.errors[:base] << "Block was not successfully stored to disk."
-    end
+    return @upload_errors
   end
 end
