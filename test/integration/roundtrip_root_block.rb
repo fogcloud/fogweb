@@ -20,6 +20,24 @@ class RoundtripRootTest < ActionDispatch::IntegrationTest
     }
     assert_response :success
 
+    put "/shares/#{@share.name}", {
+      "format" => "json",
+      "auth" => @user.auth_key,
+      "share" => {
+        "root" => block_hash
+      },
+    }
+    assert_response :success
+
+    get "/shares/#{@share.name}", {
+      "format" => "json",
+      "auth" => @user.auth_key,
+    }
+    assert_response :success
+
+    resp = JSON.parse(respone.body)
+    assert_equal resp["root"], block_hash
+
     get "/shares/#{@share.name}/get/#{block_hash}", {
       "format" => "json",
       "auth" => @user.auth_key,
