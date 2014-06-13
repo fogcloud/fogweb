@@ -8,8 +8,10 @@ class MainController < ApplicationController
 
   def dashboard
     @plan = current_user.plan
-    @percent = sprintf("%.02f", 
-      100 * current_user.megs_used.to_f / current_user.plan.megs) 
+    @store_percent = sprintf("%.02f", 
+      100 * current_user.megs_used.to_f / current_user.plan.megs)
+    @trans_percent = sprintf("%.02f", 
+      100 * current_user.megs_trans.to_f / (2 * current_user.plan.megs))
   end
 
   def contact

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140612200718) do
+ActiveRecord::Schema.define(version: 20320218173211) do
 
   create_table "plans", force: true do |t|
     t.string   "name"
@@ -22,16 +22,22 @@ ActiveRecord::Schema.define(version: 20140612200718) do
   end
 
   create_table "shares", force: true do |t|
-    t.integer  "user_id"
-    t.string   "name"
+    t.integer  "user_id",                     null: false
+    t.string   "name",                        null: false
     t.string   "root"
-    t.integer  "blocks"
+    t.integer  "block_size",  default: 65536, null: false
+    t.integer  "block_count", default: 0,     null: false
+    t.integer  "trans_bytes", default: 0,     null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "shares", ["name"], name: "index_shares_on_name"
+  add_index "shares", ["user_id", "name"], name: "index_shares_on_user_id_and_name", unique: true
+
   create_table "users", force: true do |t|
     t.string   "email",                                         null: false
+    t.string   "auth_key",                                      null: false
     t.boolean  "admin",                  default: false,        null: false
     t.integer  "plan_id"
     t.date     "expires",                default: '1995-01-01', null: false
@@ -55,6 +61,7 @@ ActiveRecord::Schema.define(version: 20140612200718) do
     t.datetime "locked_at"
   end
 
+  add_index "users", ["auth_key"], name: "index_users_on_auth_key", unique: true
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

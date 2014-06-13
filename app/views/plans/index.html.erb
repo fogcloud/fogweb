@@ -23,7 +23,7 @@
       <%= content_tag_for(:tr, @plans) do |plan| %>
             <td><%= plan.name %></td>
             <td><%= plan.megs %></td>
-            <td><%= plan.price_usd %></td>
+            <td><%= plan.usd_per_month %></td>
             <td><%= link_to 'Show', plan %></td>
         <td><%= link_to 'Edit', edit_plan_path(plan) %></td>
         <td><%= link_to 'Destroy', plan, method: :delete, data: { confirm: 'Are you sure?' } %></td>

@@ -1,1 +1,1 @@
-json.extract! @share, :id, :name, :root, :blocks, :created_at, :updated_at
+json.extract! @share, :id, :name, :root, :block_count, :blocks, :created_at, :updated_at

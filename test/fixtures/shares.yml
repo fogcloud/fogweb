@@ -1,11 +1,17 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  root: MyString
-  blocks: 1
+  user: user
+  name: ee673d13de31533a375b41d9e57731d9bb4dbddbd6c1d2364f15be40fd783346
+  root:
+  block_size: 65536
+  block_count: 0
+  trans_bytes: 0
 
 two:
-  name: MyString
-  root: MyString
-  blocks: 1
+  user: user
+  name: 94d816c7b8e567053f1cbd98dd5368b24a27cba4ac1661d65ab02eaa83b646a0
+  root: 
+  block_size: 16384
+  block_count: 0
+  trans_bytes: 0

@@ -7,6 +7,7 @@ admin:
   expires: '2100-01-01'
   confirmed_at: '2005-01-01'
   encrypted_password: zzzz
+  auth_key: b5a3eb90249d3fafaf140203d06b1d89
 
 user:
   email: user@example.com
@@ -14,3 +15,4 @@ user:
   expires: '2100-01-01'
   confirmed_at: '2005-01-01'
   encrypted_password: zzzz
+  auth_key: 48e7f03d0b3e92c4777ed5b8714378a5

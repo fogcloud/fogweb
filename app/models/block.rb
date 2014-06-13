@@ -3,56 +3,53 @@ require 'fileutils'
 
 class Block
   attr_accessor :name
-  attr_accessor :user_id
+  attr_accessor :share
+  attr_reader :errors
 
-  def self.block_size
-    65536
-  end
-
-  def user
-    User.find(user_id)
+  def initialize(share, name)
+    @name = name
+    @share = share
+    @errors = []
   end
 
   def path
-    # 4096 entries in each of base, d0, and d1
-    # allows for 64G blocks = 256TB
+    # 2048 entries in each of base, d0, and d1
+    # allows for 8G blocks = 512TB with 64k blocks
     d0 = name[0..2]
     d1 = name[3..5]
-    "/data/#{user.id}/#{d0}/#{d1}/#{name}"
+    share.data_root.join(d0, d1, name)
   end
   
-  def file
-    Rails.root.join("public", path[1..-1])
-  end
-
-  def upload=(upload)
-    if upload.size != Block.block_size
-      @upload_errors ||= []
-      @upload_errors << "Block size must be exactly #{Block.block_size} bytes."
+  def save_upload(upload)
+    if upload.size != share.block_size
+      @errors << "Block size must be exactly #{share.block_size} bytes."
       return
     end
 
-    FileUtils.mkdir_p(file.dirname.to_s)
+    FileUtils.mkdir_p(path.dirname.to_s)
 
-    data = upload.read(Block.block_size)
+    data = upload.read(share.block_size)
 
-    File.open(file, "wb") do |ff|
+    File.open(path, "wb") do |ff|
       ff.write(data)
     end
 
-    unless File.file?(file) && File.size(file) == Block.block_size
-      @upload_erros ||= []
-      @upload_errors << "Block was not successfully stored to disk."
+    unless File.file?(path) && File.size(path) == share.block_size
+      @errors << "Block was not successfully stored to disk."
       return
     end
   end
 
+  def data
+    path.read
+  end
+
   def remove!
-    if file.to_s.length > 10
+    if path.to_s.length > 10
       begin
-        File.unlink(file.to_s)
+        File.unlink(path.to_s)
        
-        dd = file.dirname
+        dd = path.dirname
 
         loop do
           Dir.rmdir(dd.to_s)
@@ -64,9 +61,5 @@ class Block
         # pass
       end
     end
-  end
-
-  def check_upload_errors
-    return @upload_errors
   end
 end

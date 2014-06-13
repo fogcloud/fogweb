@@ -5,7 +5,7 @@
 </div>
 
 <div class="row">
-  <p>Here's where you can manage your FogSync.com file storage.</p>
+  <p>You can manage your FogSync.com storage here.</p>
 </div>
 
 <div class="row">
@@ -15,12 +15,15 @@
     <table class="table">
       <tbody>
       <tr>
-        <td>Megs</td>
-        <td><%= current_user.megs_used %></td>
+        <td>Megs Stored</td>
+        <td><%= current_user.megs_used %> (<%= @store_percent %>%)</td>
       </tr>
       <tr>
-        <td>Percent</td>
-        <td><%= @percent %>%</td>
+        <td>Megs Transferred</td>
+        <td><%= current_user.megs_trans %> (<%= @trans_percent %>%)</td>
+      <tr>
+        <td colspan="2">Transfer is a soft limit. You may be throttled if many users on the same
+          server exceed this limit.</td>
       </tr>
       </tbody>
     </table>
@@ -36,13 +39,19 @@
         <td><%= @plan.name %></td>
       </tr>
       <tr>
-        <td>Megs</td>
+        <td>Megs of Storage</td>
         <td><%= @plan.megs %></td>
       </tr>
       <tr>
         <td>USD/month</td>
         <td><%= @plan.usd_per_month %></td>
       </tr>
+      <tr>
+        <td colspan="2">
+          <div class="center">
+            <%= link_to "Change Your Plan", plans_path %>
+          </div>
+        </td>
       </tbody>
     </table>
   </div>

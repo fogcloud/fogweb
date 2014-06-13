@@ -21,7 +21,10 @@ class ApplicationController < ActionController::Base
 
   def must_be_signed_in
     unless user_signed_in?
-      redirect_to new_user_session_path, notice: "Please log in first."
+      respond_to do |format|
+        format.html { redirect_to new_user_session_path, notice: "Please log in first." }
+        format.json { render status: 401, json: { error: "Must be logged in" } }
+      end
     end
   end
 
@@ -29,5 +32,17 @@ class ApplicationController < ActionController::Base
     if user_signed_in?
       redirect_to main_dashboard_path
     end 
+  end
+
+  def sign_in_with_auth_key
+    user = User.find_by_auth_key(params[:auth])
+
+    if user
+      sign_in user
+    else 
+      respond_to do |format|
+        format.json { render status: 401, json: { error: "Invalid authentication key" } }
+      end
+    end
   end
 end

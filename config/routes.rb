@@ -1,7 +1,4 @@
 Fogweb::Application.routes.draw do
-
-  resources :shares
-
   get 'users/sign_up' => redirect('/404.html')
   post 'users/create' => redirect('/404.html')
 
@@ -10,11 +7,11 @@ Fogweb::Application.routes.draw do
   resources :users
   resources :plans
 
-  get  "blocks/upload_form"
-  post "blocks/upload"
-  get  "blocks/download_form"
-  post "blocks/download"
-  resources :blocks
+  get  "shares/:name/get/:block", to: "shares#get_block"
+  post "shares/:name/put/:block", to: "shares#put_block"
+  post "shares/:name/remove", to: "shares#remove_blocks"
+
+  resources :shares, param: :name, only: [:index, :show, :create, :update, :destroy]
 
   get "main/index"
   get "main/contact"

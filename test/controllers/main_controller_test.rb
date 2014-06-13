@@ -10,4 +10,10 @@ class MainControllerTest < ActionController::TestCase
     get :contact
     assert_response :success
   end
+
+  test "should get dashboard" do
+    sign_in users(:user)
+    get :dashboard
+    assert_response :success
+  end
 end

@@ -26,7 +26,7 @@ class PlansControllerTest < ActionController::TestCase
     sign_in @admin
 
     assert_difference('Plan.count') do
-      post :create, plan: { megs: @plan.megs, name: @plan.name, price_usd: @plan.price_usd }
+      post :create, plan: { megs: @plan.megs, name: @plan.name, usd_per_month: @plan.usd_per_month }
     end
 
     assert_redirected_to plan_path(assigns(:plan))
@@ -49,7 +49,7 @@ class PlansControllerTest < ActionController::TestCase
   test "should update plan" do
     sign_in @admin
 
-    patch :update, id: @plan, plan: { megs: @plan.megs, name: @plan.name, price_usd: @plan.price_usd }
+    patch :update, id: @plan, plan: { megs: @plan.megs, name: @plan.name, usd_per_month: @plan.usd_per_month }
     assert_redirected_to plan_path(assigns(:plan))
   end
 

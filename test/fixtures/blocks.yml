@@ -1,9 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  user: user
-  name: 8abff99b533fab5b313c2d85f0ba8a2f2ef23305dc4527103c7c285149e2f186
-
-two:
-  user: user
-  name: 20e728b3cbd555040e74c5c109abf8760bba19ab13df68c58e6e969f511665ca

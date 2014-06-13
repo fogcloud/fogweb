@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 default:
-  name: Default
+  name: Free Plan
   megs: 1024
-  price_usd: 9.99
+  usd_per_month: 0.0
 
 plan2:
-  name: Default
-  megs: 1024
-  price_usd: 9.99
+  name: Standard Plan
+  megs: 5120
+  usd_per_month: 5.00

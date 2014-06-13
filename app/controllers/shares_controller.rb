@@ -1,37 +1,25 @@
 class SharesController < ApplicationController
-  before_action :set_share, only: [:show, :edit, :update, :destroy]
+  skip_before_filter :verify_authenticity_token
+  before_filter :sign_in_with_auth_key
 
-  # GET /shares
-  # GET /shares.json
+  before_filter :set_share, except: [:index, :create]
+
+  # GET /shares (json)
   def index
-    @shares = Share.all
-  end
-
-  # GET /shares/1
-  # GET /shares/1.json
-  def show
-  end
-
-  # GET /shares/new
-  def new
-    @share = Share.new
-  end
-
-  # GET /shares/1/edit
-  def edit
+    @shares = current_user.shares
   end
 
   # POST /shares
   # POST /shares.json
   def create
     @share = Share.new(share_params)
+    @share.user_id = current_user.id 
 
     respond_to do |format|
       if @share.save
-        format.html { redirect_to @share, notice: 'Share was successfully created.' }
         format.json { render action: 'show', status: :created, location: @share }
       else
-        format.html { render action: 'new' }
+        logger.info @share.errors.inspect
         format.json { render json: @share.errors, status: :unprocessable_entity }
       end
     end
@@ -42,10 +30,9 @@ class SharesController < ApplicationController
   def update
     respond_to do |format|
       if @share.update(share_params)
-        format.html { redirect_to @share, notice: 'Share was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        logger.info @share.errors.inspect
         format.json { render json: @share.errors, status: :unprocessable_entity }
       end
     end
@@ -54,21 +41,86 @@ class SharesController < ApplicationController
   # DELETE /shares/1
   # DELETE /shares/1.json
   def destroy
-    @share.destroy
+    if @share.destroy
+      respond_to do |format|
+        format.json { head :no_content }
+      end
+    else
+      respond_to do |format|
+        logger.info @share.errors.inspect
+        format.json { render json: @share.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # GET /shares/1a1a (json)
+  def show
+    @blocks = @share.blocks
+  end
+
+  # GET /shares/1a1a/get/2b2b (json)
+  def get_block
+    name = params[:block]
+    data = @share.block_data(name)
+    
+    if data
+      send_data data, type: 'application/octet-stream'
+    else
+       respond_to do |format|
+        logger.info @share.errors.inspect
+        format.json do
+          render json: { error: "Couldn't access block" }, status: :unprocessable_entity
+        end
+      end
+    end
+  end
+
+  # POST /shares/1a1a/put/2b2b (json)
+  def put_block
+    name = params[:block]
+    upload = params[:upload]
+
+    bb = Block.new(@share, name)
+    bb.save_upload(upload)
+
+    if bb.errors.empty?
+      respond_to do |format|
+        format.json { head :no_content }
+      end
+    else
+      respond_to do |format|
+        logger.info bb.errors.inspect
+        format.json { render json: bb.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # POST /shares/1a1a/remove (json)
+  def remove_blocks
+    blocks = params[:blocks]
+
+    blocks.each do |name|
+      bb = Block.new(@share, name)
+      bb.remove!
+    end
+   
     respond_to do |format|
-      format.html { redirect_to shares_url }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_share
-      @share = Share.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def share_params
-      params.require(:share).permit(:name, :root, :blocks)
+  def set_share
+    @share = Share.find_by(user_id: current_user.id, name: params[:name])
+
+    unless @share
+      format.json { render json: { error: "No such share", status: :unprocessable_entity } }
     end
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def share_params
+    params.require(:share).permit(:name, :root)
+  end
 end
