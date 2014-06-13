@@ -5,7 +5,7 @@ require 'pathname'
 require 'digest/sha2'
 require 'json'
 
-class RoundtripRootTest < ActionDispatch::IntegrationTest
+class RoundtripRootBlockTest < ActionDispatch::IntegrationTest
   test "roundtrip a root block" do
     @user = users(:user)
     @share = shares(:one)
@@ -35,7 +35,7 @@ class RoundtripRootTest < ActionDispatch::IntegrationTest
     }
     assert_response :success
 
-    resp = JSON.parse(respone.body)
+    resp = JSON.parse(response.body)
     assert_equal resp["root"], block_hash
 
     get "/shares/#{@share.name}/get/#{block_hash}", {
