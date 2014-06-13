@@ -2,7 +2,7 @@ class Defaults < ActiveRecord::Migration
   def up
     return unless Rails.env.development?
 
-    Plan.create!(name: "Default", megs: "5120", price_usd: "5.00")
+    Plan.create!(name: "Default", megs: "5120", usd_per_month: "5.00")
 
     uu = User.create!(
       email: "nat@ferrus.net", 

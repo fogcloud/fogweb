@@ -7,11 +7,9 @@ class MainController < ApplicationController
   end
 
   def dashboard
-    @user = current_user
     @plan = current_user.plan
-
-    lb = Block.order(:created_at).last
-    @last = lb.nil? ? "" : lb.created_at
+    @percent = sprintf("%.02f", 
+      100 * current_user.megs_used.to_f / current_user.plan.megs) 
   end
 
   def contact

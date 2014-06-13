@@ -3,7 +3,7 @@ class CreatePlans < ActiveRecord::Migration
     create_table :plans do |t|
       t.string :name
       t.integer :megs
-      t.decimal :price_usd, precision: 10, scale: 2
+      t.decimal :usd_per_month, precision: 10, scale: 2
 
       t.timestamps
     end

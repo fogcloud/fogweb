@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  has_many   :blocks, dependent: :destroy
+  has_many   :shares, dependent: :destroy
   belongs_to :plan
 
   # Include default devise modules. Others available are:
@@ -15,7 +15,11 @@ class User < ActiveRecord::Base
     end
   end
 
-  def megs
-    (blocks.count * Block.block_size) / 1.megabyte
+  def megs_used
+    shares.reduce(0) {|mm, ss| mm + ss.megs_used }
+  end
+
+  def data_root
+    Rails.root.join('data', id)
   end
 end

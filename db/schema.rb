@@ -11,22 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140402182051) do
-
-  create_table "blocks", force: true do |t|
-    t.integer  "user_id"
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "blocks", ["name"], name: "index_blocks_on_name", unique: true
-  add_index "blocks", ["user_id"], name: "index_blocks_on_user_id"
+ActiveRecord::Schema.define(version: 20140612200718) do
 
   create_table "plans", force: true do |t|
     t.string   "name"
     t.integer  "megs"
-    t.decimal  "price_usd",  precision: 10, scale: 2
+    t.decimal  "usd_per_month", precision: 10, scale: 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "shares", force: true do |t|
+    t.integer  "user_id"
+    t.string   "name"
+    t.string   "root"
+    t.integer  "blocks"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -54,8 +53,6 @@ ActiveRecord::Schema.define(version: 20140402182051) do
     t.integer  "failed_attempts",        default: 0,            null: false
     t.string   "unlock_token"
     t.datetime "locked_at"
-    t.string   "root"
-    t.string   "log"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true

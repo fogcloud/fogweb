@@ -6,7 +6,6 @@
 
 <div class="row">
   <p>Here's where you can manage your FogSync.com file storage.</p>
-  <p>Last activity: <span class="local-date"><%= @last %></span></p>
 </div>
 
 <div class="row">
@@ -17,15 +16,11 @@
       <tbody>
       <tr>
         <td>Megs</td>
-        <td><%= @user.megs %></td>
-      </tr>
-      <tr>
-        <td>Blocks</td>
-        <td><%= @user.blocks.count %> (<%= link_to "list", blocks_path %>)</td>
+        <td><%= current_user.megs_used %></td>
       </tr>
       <tr>
         <td>Percent</td>
-        <td><%= sprintf("%.02f", 100 * @user.megs.to_f / @plan.megs) %></td>
+        <td><%= @percent %>%</td>
       </tr>
       </tbody>
     </table>
@@ -46,8 +41,27 @@
       </tr>
       <tr>
         <td>USD/month</td>
-        <td><%= @plan.price_usd %></td>
+        <td><%= @plan.usd_per_month %></td>
       </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-sm-12">
+    <h2>Shares</h2>
+
+    <table class="table">
+      <thead>
+        <th>Hash of Share Name</th>
+        <th>Megs Used</th>
+      </thead>
+      <tbody>
+      <% current_user.shares.each do |ss| %>
+        <tr>
+          <td><%= ss.name %></td>
+          <td><%= ss.megs_used %></td>
+        </tr>
+      <% end %>
       </tbody>
     </table>
   </div>

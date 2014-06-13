@@ -1,5 +1,7 @@
 Fogweb::Application.routes.draw do
 
+  resources :shares
+
   get 'users/sign_up' => redirect('/404.html')
   post 'users/create' => redirect('/404.html')
 
