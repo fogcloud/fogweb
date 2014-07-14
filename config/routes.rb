@@ -7,8 +7,9 @@ Fogweb::Application.routes.draw do
   resources :users
   resources :plans
 
-  get  "shares/:name/get/:block", to: "shares#get_block"
-  post "shares/:name/put/:block", to: "shares#put_block"
+  post "shares/:name/check",  to: "shares#check_blocks"
+  post "shares/:name/get",    to: "shares#get_blocks"
+  post "shares/:name/put",    to: "shares#put_blocks"
   post "shares/:name/remove", to: "shares#remove_blocks"
 
   resources :shares, param: :name, only: [:index, :show, :create, :update, :destroy]
@@ -17,6 +18,7 @@ Fogweb::Application.routes.draw do
   get "main/contact"
   get "main/dashboard"
   get "main/admin"
+  get "main/auth"
 
   root 'main#index'
 

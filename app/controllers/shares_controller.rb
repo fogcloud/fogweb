@@ -58,8 +58,13 @@ class SharesController < ApplicationController
     @blocks = @share.blocks
   end
 
-  # GET /shares/1a1a/get/2b2b (json)
-  def get_block
+  # POST /shares/1a1a/check (json)
+  def check_blocks
+
+  end
+
+  # POST /shares/1a1a/get (json)
+  def get_blocks
     name = params[:block]
     data = @share.block_data(name)
     
@@ -76,7 +81,7 @@ class SharesController < ApplicationController
   end
 
   # POST /shares/1a1a/put/2b2b (json)
-  def put_block
+  def put_blocks
     name = params[:block]
     upload = params[:upload]
 
