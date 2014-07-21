@@ -1,7 +1,8 @@
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
+  #protect_from_forgery with: :exception
+  protect_from_forgery with: :null_session
 
   def show_notice(msg)
     flash[:notice] ||= []
@@ -20,6 +21,18 @@ class ApplicationController < ActionController::Base
   end
 
   def must_be_signed_in
+    if request.headers['X-FogSync-Auth']
+      user = User.find_by_auth_key(request.headers['X-FogSync-Auth'])
+      if user
+        sign_in user
+      else
+        force_json_response
+        respond_to do |format|
+          format.json { render status: 401, json: { error: "Invalid authentication key" } }
+        end
+      end
+    end
+
     unless user_signed_in?
       respond_to do |format|
         format.html { redirect_to new_user_session_path, notice: "Please log in first." }
@@ -34,15 +47,7 @@ class ApplicationController < ActionController::Base
     end 
   end
 
-  def sign_in_with_auth_key
-    user = User.find_by_auth_key(params[:auth])
-
-    if user
-      sign_in user
-    else 
-      respond_to do |format|
-        format.json { render status: 401, json: { error: "Invalid authentication key" } }
-      end
-    end
+  def force_json_response
+    request.format = "json"
   end
 end

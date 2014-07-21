@@ -1,4 +1,4 @@
 json.array!(@shares) do |share|
-  json.extract! share, :id, :name, :root, :blocks
-  json.url share_url(share, format: :json)
+  json.extract! share, :name, :root, :block_size, :block_count, 
+    :trans_bytes, :created_at, :updated_at
 end

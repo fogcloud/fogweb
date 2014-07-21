@@ -1,8 +1,8 @@
 class SharesController < ApplicationController
-  skip_before_filter :verify_authenticity_token
-  before_filter :sign_in_with_auth_key
+  before_filter :must_be_signed_in
 
   before_filter :set_share, except: [:index, :create]
+  before_filter :force_json_response
 
   # GET /shares (json)
   def index
@@ -120,7 +120,11 @@ class SharesController < ApplicationController
     @share = Share.find_by(user_id: current_user.id, name: params[:name])
 
     unless @share
-      format.json { render json: { error: "No such share", status: :unprocessable_entity } }
+      respond_to do |format|
+        format.json do
+          render json: { error: "No such share"}, status: :unprocessable_entity
+        end
+      end
     end
   end
 
