@@ -122,7 +122,7 @@ class SharesController < ApplicationController
     unless @share
       respond_to do |format|
         format.json do
-          render json: { error: "No such share"}, status: :unprocessable_entity
+          render json: { error: "No such share"}, status: 404
         end
       end
     end
@@ -130,6 +130,6 @@ class SharesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def share_params
-    params.require(:share).permit(:name, :root)
+    params.require(:share).permit(:name, :root, :block_size)
   end
 end
