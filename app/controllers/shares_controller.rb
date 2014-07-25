@@ -1,3 +1,5 @@
+require 'block_archive'
+
 class SharesController < ApplicationController
   before_filter :must_be_signed_in
 
@@ -82,21 +84,26 @@ class SharesController < ApplicationController
 
   # POST /shares/1a1a/put/2b2b (json)
   def put_blocks
-    name = params[:block]
-    upload = params[:upload]
+    ba = BlockArchive.new(request.body)
+    count = 0
 
-    bb = Block.new(@share, name)
-    bb.save_upload(upload)
+    begin
+      ba.each do |name, data|
+        bb = Block.new(@share, name)
+        bb.save_data(data)
+        count = count + 1
+      end
+    rescue StandardError => ee
+      respond_to do |format|
+        logger.info ee
+        format.json { render json: ee, status: :unprocessable_entity }
+        return
+      end
+    end
 
-    if bb.errors.empty?
-      respond_to do |format|
-        format.json { head :no_content }
-      end
-    else
-      respond_to do |format|
-        logger.info bb.errors.inspect
-        format.json { render json: bb.errors, status: :unprocessable_entity }
-      end
+    respond_to do |format|
+      logger.info "Saved #{count} blocks"
+      format.json { render json: {count: count} }
     end
   end
 

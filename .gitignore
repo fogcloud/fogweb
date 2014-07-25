@@ -17,7 +17,9 @@
 
 # Generated assets.
 /public/assets
-/public/data
+
+# User data
+/data
 
 # Vim tempfiles.
 .*.swp

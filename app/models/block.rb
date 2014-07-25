@@ -1,5 +1,6 @@
 
 require 'fileutils'
+require 'digest/sha2'
 
 class Block
   attr_accessor :name
@@ -29,6 +30,30 @@ class Block
     FileUtils.mkdir_p(path.dirname.to_s)
 
     data = upload.read(share.block_size)
+
+    File.open(path, "wb") do |ff|
+      ff.write(data)
+    end
+
+    unless File.file?(path) && File.size(path) == share.block_size
+      @errors << "Block was not successfully stored to disk."
+      return
+    end
+  end
+
+  def save_data(data)
+    if data.size != share.block_size
+      @errors << "Block size must be exactly #{share.block_size} bytes."
+      return
+    end
+
+    sha = Digest::SHA2.new
+    sha << data
+
+    if sha.hexdigest != @name
+      @errors << "Block hash mismatch"
+      return
+    end
 
     File.open(path, "wb") do |ff|
       ff.write(data)
