@@ -114,13 +114,12 @@ class SharesController < ApplicationController
 
   # POST /shares/1a1a/remove (json)
   def remove_blocks
-    blocks = params[:blocks]
-
-    blocks.each do |name|
+    request.body.each_line do |name|
+      name.chomp!
       bb = Block.new(@share, name)
       bb.remove!
     end
-   
+
     respond_to do |format|
       format.json { head :no_content }
     end
