@@ -7,16 +7,16 @@ class BlockArchive
 
   def read_block
     hash = @data.read(32)
-    if hash.size != 32
+    if hash.nil? || hash.size != 32
       return nil, nil
     end
 
     data = @data.read(@blsz)
-    if data.size != @blsz
+    if data.nil? || data.size != @blsz
       return nil, nil
     end
 
-    return hash, data
+    return hash.unpack("H*")[0], data
   end
 
   def each
@@ -30,3 +30,4 @@ class BlockArchive
     end
   end
 end
+

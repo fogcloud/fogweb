@@ -44,6 +44,7 @@ class Block
   def save_data(data)
     if data.size != share.block_size
       @errors << "Block size must be exactly #{share.block_size} bytes."
+      @errors << "Got block size #{data.size}."
       return
     end
 
@@ -51,13 +52,19 @@ class Block
     sha << data
 
     if sha.hexdigest != @name
+      puts "(name = #{@name})"
+      puts "(hash = #{sha.hexdigest})"
       @errors << "Block hash mismatch"
       return
     end
 
+    FileUtils.mkdir_p(path.dirname.to_s)
+
     File.open(path, "wb") do |ff|
       ff.write(data)
     end
+
+    puts "Saved block to #{path}"
 
     unless File.file?(path) && File.size(path) == share.block_size
       @errors << "Block was not successfully stored to disk."

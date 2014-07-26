@@ -84,26 +84,31 @@ class SharesController < ApplicationController
 
   # POST /shares/1a1a/put/2b2b (json)
   def put_blocks
-    ba = BlockArchive.new(request.body)
+    ba = BlockArchive.new(request.body, @share.block_size)
     count = 0
 
     begin
       ba.each do |name, data|
         bb = Block.new(@share, name)
         bb.save_data(data)
-        count = count + 1
+
+        if bb.errors.nil? || bb.errors.empty?
+          count = count + 1
+        else
+          raise Exception.new(bb.errors)
+        end
       end
     rescue StandardError => ee
+      logger.info ee
       respond_to do |format|
-        logger.info ee
-        format.json { render json: ee, status: :unprocessable_entity }
-        return
+        format.json { render json: {error: ee.inspect}, status: :unprocessable_entity }
       end
+      return
     end
 
     respond_to do |format|
       logger.info "Saved #{count} blocks"
-      format.json { render json: {count: count} }
+      format.json { render json: {count: count}, status: 200 }
     end
   end
 
