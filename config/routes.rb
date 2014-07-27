@@ -11,6 +11,7 @@ Fogweb::Application.routes.draw do
   post "shares/:name/get",    to: "shares#get_blocks"
   post "shares/:name/put",    to: "shares#put_blocks"
   post "shares/:name/remove", to: "shares#remove_blocks"
+  post "shares/:name/casr",   to: "shares#swap_root"
 
   resources :shares, param: :name, only: [:index, :show, :create, :update, :destroy]
 

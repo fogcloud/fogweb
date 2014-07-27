@@ -48,7 +48,7 @@ group :development, :test do
   gem "launchy"
   gem "simplecov"
   gem "turn"
-  gem "webrick"
+  gem "thin"
 end
 
 #group :doc do

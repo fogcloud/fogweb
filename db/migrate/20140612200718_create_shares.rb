@@ -3,7 +3,7 @@ class CreateShares < ActiveRecord::Migration
     create_table :shares do |t|
       t.integer :user_id, null: false
       t.string  :name, null: false
-      t.text    :roots
+      t.string  :root
       t.integer :block_size, null: false, default: 65536
       
       t.integer :block_count, null: false, default: 0

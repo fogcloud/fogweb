@@ -125,6 +125,32 @@ class SharesController < ApplicationController
     end
   end
 
+  # POST /shares/1a1a/casr (json)
+  def swap_root
+    begin
+      prev = params[:prev]
+      root = params[:root]
+
+      Share.transaction do
+        ss = Share.find(@share.id)
+        if ss.root == prev
+          ss.root = root
+          ss.save!
+        else
+          raise StandardError.new("Abort")
+        end
+      end
+      
+      respond_to do |format|
+        format.json { head :no_content }
+      end
+    rescue StandardError
+      respond_to do |format|
+        format.json { render json: {error: "Compare failed"}, status: 409 }
+      end
+    end
+  end
+
   private
 
   def set_share

@@ -23,13 +23,7 @@ class Defaults < ActiveRecord::Migration
       auth_key: "b5a3eb90249d3fafaf140203d06b1d89",
     )
     uu.save!
-
-    ss = Share.create!(
-      user_id: uu.id,
-      name: "b4d6db730b2c0b6aee8be1b33156b3d8dbb2ed291b3bf3dec571a26bb1879573",
-      roots: "",
-    )
- end
+  end
 
   def down
   end
