@@ -84,6 +84,10 @@ class SharesController < ApplicationController
 
   # POST /shares/1a1a/put/2b2b (json)
   def put_blocks
+    unless request.content_type =~ /octet/i
+      raise StandardError.new("Expected binary body")
+    end
+
     ba = BlockArchive.new(request.body, @share.block_size)
     count = 0
 
@@ -107,8 +111,14 @@ class SharesController < ApplicationController
     end
 
     respond_to do |format|
-      logger.info "Saved #{count} blocks"
-      format.json { render json: {count: count}, status: 200 }
+      format.json do
+        logger.info "Saved #{count} blocks"
+        if count == 0
+          render json: {error: "Updated no blocks"}, status: 400
+        else
+          render json: {count: count}, status: 200
+        end
+      end
     end
   end
 
