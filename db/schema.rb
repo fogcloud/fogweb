@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20320218173211) do
   create_table "shares", force: true do |t|
     t.integer  "user_id",                     null: false
     t.string   "name",                        null: false
-    t.string   "root"
+    t.string   "root",        default: "",    null: false
     t.integer  "block_size",  default: 65536, null: false
     t.integer  "block_count", default: 0,     null: false
     t.integer  "trans_bytes", default: 0,     null: false

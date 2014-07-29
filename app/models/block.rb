@@ -8,6 +8,9 @@ class Block
   attr_reader :errors
 
   def initialize(share, name)
+    unless name.size == 64
+      raise StandardError.new("Invalid block name: [#{name}]")
+    end
     @name = name
     @share = share
     @errors = []
@@ -60,9 +63,10 @@ class Block
 
     FileUtils.mkdir_p(path.dirname.to_s)
 
-    File.open(path, "wb") do |ff|
-      ff.write(data)
-    end
+    path.write(data)
+    #File.open(path, "wb") do |ff|
+    #  ff.write(data)
+    #end
 
     puts "Saved block to #{path}"
 

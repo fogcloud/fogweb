@@ -1,6 +1,8 @@
 require 'block_archive'
 
 class SharesController < ApplicationController
+  include ActionController::Live
+
   before_filter :must_be_signed_in
 
   before_filter :set_share, except: [:index, :create]
@@ -65,24 +67,26 @@ class SharesController < ApplicationController
 
   end
 
-  # POST /shares/1a1a/get (json)
+  # POST /shares/1a1a/get (binary)
   def get_blocks
-    name = params[:block]
-    data = @share.block_data(name)
-    
-    if data
-      send_data data, type: 'application/octet-stream'
-    else
-       respond_to do |format|
-        logger.info @share.errors.inspect
-        format.json do
-          render json: { error: "Couldn't access block" }, status: :unprocessable_entity
-        end
-      end
+    unless request.content_type =~ /octet/i
+      raise StandardError.new("Expected binary body")
     end
+ 
+    response.headers['Content-Type'] = 'application/octet-stream'
+
+    ba = BlockArchive.new(response.stream, @share.block_size)
+
+    request.body.each_line do |name|
+      name.chomp!
+      bb = Block.new(@share, name)
+      ba.add(name, bb.data)
+    end
+      
+    ba.close
   end
 
-  # POST /shares/1a1a/put/2b2b (json)
+  # POST /shares/1a1a/put/2b2b (binary)
   def put_blocks
     unless request.content_type =~ /octet/i
       raise StandardError.new("Expected binary body")
@@ -141,22 +145,30 @@ class SharesController < ApplicationController
       prev = params[:prev]
       root = params[:root]
 
+      bb = Block.new(@share, root)
+      unless File.exist?(bb.path)
+        raise StandardError.new("No such block")
+      end
+
       Share.transaction do
         ss = Share.find(@share.id)
         if ss.root == prev
           ss.root = root
           ss.save!
         else
-          raise StandardError.new("Abort")
+          logger.info "Curr root: [#{ss.root}]"
+          logger.info "Prev root: [#{prev}]"
+          raise StandardError.new("Compare Failed")
         end
       end
       
       respond_to do |format|
         format.json { head :no_content }
       end
-    rescue StandardError
+    rescue StandardError => ee
       respond_to do |format|
-        format.json { render json: {error: "Compare failed"}, status: 409 }
+        logger.info ee
+        format.json { render json: {error: ee}, status: 409 }
       end
     end
   end
