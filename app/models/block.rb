@@ -63,10 +63,9 @@ class Block
 
     FileUtils.mkdir_p(path.dirname.to_s)
 
-    path.write(data)
-    #File.open(path, "wb") do |ff|
-    #  ff.write(data)
-    #end
+    File.open(path, "wb") do |ff|
+      ff.write(data)
+    end
 
     puts "Saved block to #{path}"
 

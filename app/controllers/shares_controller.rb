@@ -107,7 +107,8 @@ class SharesController < ApplicationController
         end
       end
     rescue StandardError => ee
-      logger.info ee
+      logger.info ee.backtrace
+      logger.info ee.inspect
       respond_to do |format|
         format.json { render json: {error: ee.inspect}, status: :unprocessable_entity }
       end
