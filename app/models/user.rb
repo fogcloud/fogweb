@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
 
   def generate_auth_key
     if auth_key.nil? || auth_key.size != 32
-      auth_key = SecureRandom.hex(16)
+      self.auth_key = SecureRandom.hex(16)
     end
   end
 end
