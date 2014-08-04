@@ -4,6 +4,7 @@ class CreateShares < ActiveRecord::Migration
       t.integer :user_id, null: false
       t.string  :name, null: false
       t.string  :root, null: false, default: ""
+      t.text    :secrets, null: false
       t.integer :block_size, null: false, default: 65536
       
       t.integer :block_count, null: false, default: 0

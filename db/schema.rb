@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20320218173211) do
     t.integer  "user_id",                     null: false
     t.string   "name",                        null: false
     t.string   "root",        default: "",    null: false
+    t.text     "secrets",                     null: false
     t.integer  "block_size",  default: 65536, null: false
     t.integer  "block_count", default: 0,     null: false
     t.integer  "trans_bytes", default: 0,     null: false
