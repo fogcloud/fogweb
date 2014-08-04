@@ -77,7 +77,7 @@ class SharesController < ApplicationController
 
     ba = BlockArchive.new(response.stream, @share.block_size)
 
-    request.body.each_line do |name|
+    request.body.each do |name|
       name.chomp!
       bb = Block.new(@share, name)
       ba.add(name, bb.data)
