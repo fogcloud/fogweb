@@ -129,7 +129,7 @@ class SharesController < ApplicationController
 
   # POST /shares/1a1a/remove (json)
   def remove_blocks
-    request.body.each_line do |name|
+    request.body.each do |name|
       name.chomp!
       bb = Block.new(@share, name)
       bb.remove!
