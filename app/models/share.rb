@@ -46,6 +46,17 @@ class Share < ActiveRecord::Base
     Block.new(self, hash).data
   end
 
+  def trans_blocks!(count)
+    bytes = count * block_size
+    self.trans_bytes += bytes
+    save!
+  end
+
+  def trans_reset!
+    self.trans_bytes = 0
+    save!
+  end
+
   private
 
   def remove_data

@@ -77,13 +77,19 @@ class SharesController < ApplicationController
 
     ba = BlockArchive.new(response.stream, @share.block_size)
 
+    count = 0
+
     request.body.each do |name|
       name.chomp!
       bb = Block.new(@share, name)
       ba.add(name, bb.data)
+
+      count += 1
     end
       
     ba.close
+
+    @share.trans_blocks!(count)
   end
 
   # POST /shares/1a1a/put/2b2b (binary)
@@ -114,6 +120,8 @@ class SharesController < ApplicationController
       end
       return
     end
+
+    @share.trans_blocks!(count)
 
     respond_to do |format|
       format.json do
