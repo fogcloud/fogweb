@@ -1,4 +1,5 @@
 require 'securerandom'
+require 'secrets'
 
 class User < ActiveRecord::Base
   has_many   :shares, dependent: :destroy
@@ -8,6 +9,9 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :confirmable, :lockable,
          :recoverable, :rememberable, :trackable, :validatable
+
+  attr_accessor :invite_code
+  validate :valid_invite_code, on: :create
 
   before_save :generate_auth_key
 
@@ -33,6 +37,13 @@ class User < ActiveRecord::Base
   end
 
   private
+
+  def valid_invite_code
+    correct_code = Secrets.get_hex('invite_code', 4)
+    unless invite_code == correct_code
+      errors.add(:invite_code, "not valid")
+    end
+  end
 
   def generate_auth_key
     if auth_key.nil? || auth_key.size != 32

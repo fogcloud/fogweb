@@ -1,3 +1,5 @@
+require 'secrets'
+
 class MainController < ApplicationController
   before_filter :cant_be_signed_in, only: [:index]
   before_filter :must_be_signed_in, only: [:dashboard]
@@ -19,6 +21,7 @@ class MainController < ApplicationController
   end
 
   def admin
+    @invite_code = Secrets.get_hex('invite_code', 4)
   end
 
   def auth

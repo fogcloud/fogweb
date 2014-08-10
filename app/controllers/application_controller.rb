@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
   #protect_from_forgery with: :exception
   protect_from_forgery with: :null_session
 
+  before_action :devise_permitted_params, if: :devise_controller?
+
   def show_notice(msg)
     flash[:notice] ||= []
     flash[:notice] << msg
@@ -49,5 +51,9 @@ class ApplicationController < ActionController::Base
 
   def force_json_response
     request.format = "json"
+  end
+
+  def devise_permitted_params
+    devise_parameter_sanitizer.for(:sign_up) << :invite_code
   end
 end
