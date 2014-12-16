@@ -17,11 +17,11 @@ class Block
   end
 
   def path
-    # 2048 entries in each of base, d0, and d1
-    # allows for 8G blocks = 512TB with 64k blocks
-    d0 = name[0..2]
-    d1 = name[3..5]
-    share.data_root.join(d0, d1, name)
+    # Modern filesystems can handle many files in a single
+    # directory. If this becomes an issue, we can make it
+    # nest deeper.
+    d0 = name[0..1]
+    share.data_root.join(d0, name)
   end
   
   def save_upload(upload)
